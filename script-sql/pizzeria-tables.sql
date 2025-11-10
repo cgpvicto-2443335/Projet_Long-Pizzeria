@@ -1,0 +1,65 @@
+DROP DATABASE IF EXISTS pizzeria;
+CREATE DATABASE pizzeria;
+
+DROP TABLE IF EXISTS clients;
+CREATE TABLE clients(
+id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+nom VARCHAR(50),
+prenom VARCHAR(50),
+num_telephone VARCHAR(14),
+adresse VARCHAR(50)
+);
+
+DROP TABLE IF EXISTS garnitures;
+CREATE TABLE garnitures(
+id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+nom VARCHAR(25)
+);
+
+DROP TABLE IF EXISTS types_croutes;
+CREATE TABLE types_croutes(
+id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+nom VARCHAR(25)
+);
+
+DROP TABLE IF EXISTS types_sauces;
+CREATE TABLE types_sauces(
+id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+nom VARCHAR(25)
+);
+
+DROP TABLE IF EXISTS details_pizza;
+CREATE TABLE details_pizza(
+id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+FOREIGN KEY (id_garniture) REFERENCES garnitures (id),
+FOREIGN KEY (id_croute) REFERENCES types_croutes (id),
+FOREIGN KEY (id_sauce) REFERENCES types_sauces (id)
+);
+
+DROP TABLE IF EXISTS pizza;
+CREATE TABLE pizza(
+id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+FOREIGN KEY (id_client) REFERENCES clients (id),
+FOREIGN KEY (id_detail_pizza) REFERENCES details_pizza (id)
+);
+
+DROP TABLE IF EXISTS commandes;
+CREATE TABLE commandes(
+id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+FOREIGN KEY (id_client) REFERENCES clients (id),
+FOREIGN KEY (id_pizza) REFERENCES pizza (id)
+);
+
+DROP TABLE IF EXISTS commandes_attente;
+CREATE TABLE commandes_attente(
+id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+temp_attente DATETIME,
+FOREIGN KEY (id_commande) REFERENCES commandes (id)
+);
+
+CREATE TABLE livraisons(
+id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+date_depart DATETIME,
+date_arrive DATETIME,
+FOREIGN KEY (id_commande) REFERENCES commandes (id)
+);
